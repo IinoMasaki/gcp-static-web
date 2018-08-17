@@ -1,0 +1,28 @@
+{#
+  Google Cloud Storage + Google Cloud Load Balancer
+
+  本来はこのDeploymentManagerの設定で公開BUCKETの作成が行えるが、
+  カスタムドメインを使用した場合、この設定では403エラーになります。
+
+  GCS Bucketをカスタムドメインで使うには
+  nameをカスタムドメインで作成する必要があります。
+  しかし、カスタムドメインを使った登録はドメインのオーナーしか行なえません。
+
+  Deployment Managerはサービスアカウント権限でオペレーションを行うため権限エラーになります。
+#}
+
+{% set BUCKET_NAME = "sample.anypay.jp" %}
+
+resources:
+- name: {{ BUCKET_NAME }}
+  type: storage.v1.bucket
+  properties:
+    project: {{ env["project"] }}
+    storageClass: MULTI_REGIONAL
+    Location constraint: ASIA
+    acl: [
+      {
+        entity: "allUsers",
+        role: "READER"
+      }
+    ]
