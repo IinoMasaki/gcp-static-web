@@ -1,0 +1,5 @@
+steps:
+- name: 'debian'
+  args: ['tar', 'cvf', 'archive.tgz', 'src/*']
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'archive.tgz', 'gs://${_BUCKET_NAME}/']
